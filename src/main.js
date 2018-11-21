@@ -35,6 +35,7 @@ import TabsDocs from './docs/component/TabsDocs.vue'
 import ToggleButtonDocs from './docs/component/ToggleButtonDocs.vue'
 import TooltipDocs from './docs/component/TooltipDocs'
 import TablesDocs from './docs/component/TablesDocs'
+import TimelineDocs from './docs/component/TimelineDocs'
 
 import VueHighlightJS from 'vue-highlightjs'
 import VueRouter from 'vue-router'
@@ -184,6 +185,14 @@ const router = new VueRouter({
         componentName: 'TooltipDocs',
         docsName: 'Tooltips',
         auiLink: 'https://docs.atlassian.com/aui/latest/docs/tooltips.html'
+      }
+    },
+    {
+      path: '/components/timeline', component: TimelineDocs,
+      meta: {
+        componentName: 'TimelineDocs',
+        docsName: 'Timeline',
+        auiLink: 'https://docs.atlassian.com/aui/latest/docs/timeline.html'
       }
     }
   ]

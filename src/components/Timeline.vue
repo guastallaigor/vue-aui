@@ -1,11 +1,9 @@
 <template>
   <section class="timeline">
-    <ul>
+    <ul v-if="items">
       <li v-for="(item, key) in items" :key="key">
         <div class="layout nowrap-column">
-          <p class="title-header layout">
-            {{ item.title }}
-          </p>
+          <p class="title-header layout">{{ item.title }}</p>
           <span v-if="item.content">{{ item.content }}</span>
         </div>
       </li>
@@ -149,4 +147,5 @@ export default {
   .timeline ul li {
     padding-bottom: 25px;
   }
+}
 </style>
