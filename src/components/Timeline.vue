@@ -2,8 +2,9 @@
   <section class="timeline">
     <ul v-if="items">
       <li v-for="(item, key) in items" :key="key">
-        <div class="layout nowrap-column">
-          <p class="title-header layout">{{ item.title }}</p>
+        <div class="layout nowrap-column" :style="alignContentAndBorderColor">
+          <span class="arrow" :style="borderStyle(key)"></span>
+          <span class="title-header layout" :style="alignTitleAndBackgroundColor">{{ item.title }}</span>
           <span v-if="item.content">{{ item.content }}</span>
         </div>
       </li>
@@ -14,7 +15,34 @@
 <script>
 export default {
   props: {
-    items: Array
+    items: Array,
+    alignContent: {
+      type: String,
+      default: 'left'
+    },
+    alignTitle: {
+      type: String,
+      default: 'flex-start'
+    },
+    color: {
+      type: String,
+      default: '#0052cc'
+    }
+  },
+  computed: {
+    alignContentAndBorderColor() {
+      return `text-align:${this.alignContent};border:1px solid ${this.color}`
+    },
+    alignTitleAndBackgroundColor() {
+      return `justify-content:${this.alignTitle};background:${this.color}`
+    }
+  },
+  methods: {
+    borderStyle(key) {
+      return parseInt(key, 10) % 2 === 0 ?
+        `border-color: transparent ${this.color} transparent transparent;` :
+        `border-color: transparent transparent transparent ${this.color};`
+    }
   }
 }
 </script>
@@ -39,8 +67,8 @@ export default {
   width: 100%;
   margin-left: -15px;
   padding: 0 15px .1em 15px;
-  background: #0052cc;
   color: #fff;
+  background: #0052cc;
 }
 
 .timeline {
@@ -90,14 +118,25 @@ export default {
   padding: 0 15px 5px 15px;
   margin-top: -30px;
   border: 1px solid #0052cc;
-  background: #fff;
   border-radius: 3px;
+  cursor: pointer;
+  background: #fff;
+  will-change: box-shadow;
+  transition: .3s box-shadow;
 }
 
-.timeline ul li div::before {
+.timeline ul li div:hover {
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+}
+
+.timeline ul li .arrow {
   content: '';
   position: absolute;
   top: 3px;
+  height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
   left: 100%;
   width: 0;
   height: 0;
@@ -108,7 +147,7 @@ export default {
   left: 38px;
 }
 
-.timeline ul li:nth-child(odd) div::before {
+.timeline ul li:nth-child(odd) .arrow {
   left: -13px;
   border-width: 8px 13px 8px 0;
   border-color: transparent #0052cc transparent transparent;
@@ -118,7 +157,7 @@ export default {
   left: -460px;
 }
 
-.timeline ul li:nth-child(even) div::before {
+.timeline ul li:nth-child(even) .arrow {
   right: -13px;
   border-width: 8px 0 8px 13px;
   border-color: transparent transparent transparent #0052cc;
@@ -133,7 +172,7 @@ export default {
     left: 38px;
   }
 
-  .timeline ul li:nth-child(even) div::before {
+  .timeline ul li:nth-child(even) .arrow {
     left: -13px;
     border-width: 8px 13px 8px 0;
     border-color: transparent #0052cc transparent transparent;
@@ -146,6 +185,33 @@ export default {
 
   .timeline ul li {
     padding-bottom: 25px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .timeline ul li div {
+    width: 250px;
+  }
+  .timeline ul li:nth-child(even) div {
+    left: -289px;
+    /*250+45-6*/
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .timeline ul li {
+    margin-left: 20px;
+  }
+  .timeline ul li div {
+    width: calc(100vw - 91px);
+  }
+  .timeline ul li:nth-child(even) div {
+    left: 45px;
+  }
+  .timeline ul li:nth-child(even) .arrow {
+    left: -15px;
+    border-width: 8px 16px 8px 0;
+    border-color: transparent #F45B69 transparent transparent;
   }
 }
 </style>
