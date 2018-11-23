@@ -2,9 +2,9 @@
   <section class="timeline">
     <ul v-if="items">
       <li v-for="(item, key) in items" :key="key">
-        <div class="layout nowrap-column" :style="alignContentAndBorderColor">
+        <div class="layout nowrap-column" :style="alignContentAndBorderColorAndWidth(key)">
           <span class="arrow" :style="borderStyle(key)"></span>
-          <span class="title-header layout" :style="alignTitleAndBackgroundColor">{{ item.title }}</span>
+          <span class="title-header layout" :style="alignTitleAndBackgroundColor">{{ item.title }} - {{ key }}</span>
           <span v-if="item.content">{{ item.content }}</span>
         </div>
       </li>
@@ -27,17 +27,22 @@ export default {
     color: {
       type: String,
       default: '#0052cc'
+    },
+    minWidth: {
+      type: Number,
+      default: 320
     }
   },
   computed: {
-    alignContentAndBorderColor() {
-      return `text-align:${this.alignContent};border:1px solid ${this.color}`
-    },
     alignTitleAndBackgroundColor() {
       return `justify-content:${this.alignTitle};background:${this.color}`
     }
   },
   methods: {
+    alignContentAndBorderColorAndWidth(key) {
+      const style = `text-align:${this.alignContent};border:1px solid ${this.color};min-width:${this.minWidth}px;`
+      return parseInt(key, 10) % 2 !== 0 ? `${style}left:${this.minWidth ? -1.2125 * parseInt(this.minWidth, 10) + 'px' : '-388px'} !important` : style
+    },
     borderStyle(key) {
       return parseInt(key, 10) % 2 === 0 ?
         `border-color: transparent ${this.color} transparent transparent;` :
@@ -114,7 +119,6 @@ export default {
 
 .timeline ul li div {
   position: relative;
-  width: 400px;
   padding: 0 15px 5px 15px;
   margin-top: -30px;
   border: 1px solid #0052cc;
@@ -154,7 +158,7 @@ export default {
 }
 
 .timeline ul li:nth-child(even) div {
-  left: -460px;
+  left: -388px;
 }
 
 .timeline ul li:nth-child(even) .arrow {
