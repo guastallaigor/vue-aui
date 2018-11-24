@@ -1,8 +1,8 @@
 <template>
   <section class="timeline">
-    <ul v-if="items">
-      <li v-for="(item, key) in items" :key="key">
-        <div class="layout nowrap-column" :style="alignContentAndBorderColorAndWidth(key)">
+    <ul v-if="items && items.length">
+      <li v-for="(item, key) in items" :key="key" @click="$emit('click', item)">
+        <div class="layout nowrap-column" :style="alignContentAndBorderColor">
           <span class="arrow" :style="borderStyle(key)"></span>
           <span class="title-header layout" :style="alignTitleAndBackgroundColor">{{ item.title }} - {{ key }}</span>
           <span v-if="item.content">{{ item.content }}</span>
@@ -27,22 +27,17 @@ export default {
     color: {
       type: String,
       default: '#0052cc'
-    },
-    minWidth: {
-      type: Number,
-      default: 320
     }
   },
   computed: {
     alignTitleAndBackgroundColor() {
       return `justify-content:${this.alignTitle};background:${this.color}`
+    },
+    alignContentAndBorderColor() {
+      return `text-align:${this.alignContent};border:1px solid ${this.color};`
     }
   },
   methods: {
-    alignContentAndBorderColorAndWidth(key) {
-      const style = `text-align:${this.alignContent};border:1px solid ${this.color};min-width:${this.minWidth}px;`
-      return parseInt(key, 10) % 2 !== 0 ? `${style}left:${this.minWidth ? -1.2125 * parseInt(this.minWidth, 10) + 'px' : '-388px'} !important` : style
-    },
     borderStyle(key) {
       return parseInt(key, 10) % 2 === 0 ?
         `border-color: transparent ${this.color} transparent transparent;` :
@@ -52,26 +47,21 @@ export default {
 }
 </script>
 
-<style>
-.layout {
+<style scoped>
+.timeline .layout {
   display: flex;
 }
 
-.nowrap-column {
+.timeline .nowrap-column {
   flex-flow: column nowrap;
-}
-
-.spacer {
-  flex-flow: 1;
 }
 
 .timeline .title-header {
   border-bottom: 1px solid #fff;
   font-size: 1.2em;
-  margin-bottom: .1em;
   width: 100%;
   margin-left: -15px;
-  padding: 0 15px .1em 15px;
+  padding: 0 15px 0 15px;
   color: #fff;
   background: #0052cc;
 }
@@ -84,10 +74,10 @@ export default {
 .timeline ul li {
   list-style-type: none;
   position: relative;
-  width: 2px;
   margin: 0 auto;
   padding-top: 15px;
-  background: rgba(0,0,0,0.12);
+  width: 2px;
+  background: #c3c3c3;
 }
 
 .timeline ul li::after {
@@ -127,6 +117,7 @@ export default {
   background: #fff;
   will-change: box-shadow;
   transition: .3s box-shadow;
+  min-width: 320px;
 }
 
 .timeline ul li div:hover {
@@ -169,7 +160,7 @@ export default {
 
 @media screen and (max-width: 900px) and (min-width: 0px) {
   .timeline ul li div {
-    width: 220px;
+    min-width: 220px;
   }
 
   .timeline ul li:nth-child(even) div {
@@ -189,33 +180,6 @@ export default {
 
   .timeline ul li {
     padding-bottom: 25px;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .timeline ul li div {
-    width: 250px;
-  }
-  .timeline ul li:nth-child(even) div {
-    left: -289px;
-    /*250+45-6*/
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .timeline ul li {
-    margin-left: 20px;
-  }
-  .timeline ul li div {
-    width: calc(100vw - 91px);
-  }
-  .timeline ul li:nth-child(even) div {
-    left: 45px;
-  }
-  .timeline ul li:nth-child(even) .arrow {
-    left: -15px;
-    border-width: 8px 16px 8px 0;
-    border-color: transparent #F45B69 transparent transparent;
   }
 }
 </style>
